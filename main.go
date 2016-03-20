@@ -3,10 +3,11 @@ package main
 import (
 	"flag"
 	//"fmt"
+	"os"
+
 	"github.com/mdeheij/monitoring/configuration"
 	"github.com/mdeheij/monitoring/server"
 	"github.com/mdeheij/monitoring/services"
-	"os"
 )
 
 var debug bool

@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/mdeheij/monitoring/configuration"
 	"io/ioutil"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/mdeheij/monitoring/configuration"
 )
 
 var garbage string

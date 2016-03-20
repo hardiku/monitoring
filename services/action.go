@@ -2,8 +2,9 @@ package services
 
 import (
 	"fmt"
-	"github.com/mdeheij/monitoring/services/handlers"
 	"strconv"
+
+	"github.com/mdeheij/monitoring/services/handlers"
 	//	"time"
 )
 

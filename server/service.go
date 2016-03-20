@@ -2,12 +2,14 @@ package server
 
 import (
 	"encoding/json"
+
 	"github.com/gin-gonic/gin"
 	//"github.com/mdeheij/gin-csrf"
-	"github.com/mdeheij/gin-csrf"
-	"github.com/mdeheij/monitoring/services"
 	"strconv"
 	"strings"
+
+	"github.com/mdeheij/gin-csrf"
+	"github.com/mdeheij/monitoring/services"
 )
 
 func servicesInit(r *gin.Engine, debug bool, autostart bool) {

@@ -3,9 +3,10 @@ package configuration
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/contrib/sessions"
 	"io/ioutil"
 	"os"
+
+	"github.com/gin-gonic/contrib/sessions"
 )
 
 //Config instance of Configuration struct
