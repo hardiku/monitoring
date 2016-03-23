@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/mdeheij/monitoring/configuration"
+	"github.com/mdeheij/monitoring/log"
 	"github.com/mdeheij/monitoring/server"
 	"github.com/mdeheij/monitoring/services"
 )
@@ -28,11 +29,12 @@ func main() {
 		configuration.Init(config)
 		err := services.TestConfiguration()
 		if err != nil {
-			panic(err)
+			log.Panic(err)
 		} else {
 			os.Exit(0)
 		}
 	}
+	log.Info("test")
 
 	configuration.Init(config)
 	server.Setup(debug, true)

@@ -3,13 +3,13 @@ package services
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/mdeheij/monitoring/configuration"
+	"github.com/mdeheij/monitoring/log"
 )
 
 var garbage string
@@ -83,7 +83,7 @@ func EnableDebug() {
 //DebugMessage prints text when debugmode is true
 func DebugMessage(text interface{}) {
 	if DebugMode {
-		fmt.Println(text)
+		log.Info(text)
 	}
 }
 
@@ -125,7 +125,7 @@ func (service Service) Update() string {
 
 			newService.copyMemoryAttributes(&service)
 			//push new service to Services map
-			fmt.Println("Setting service -> ", service.Identifier, newService)
+			log.Info("Setting service -> ", service.Identifier, newService)
 			Services.Set(service.Identifier, newService)
 
 			return "(!!) Reloaded " + service.Identifier + " from " + newService.Identifier
@@ -312,7 +312,7 @@ func reloadServices() {
 func TestConfiguration() error {
 	services := getServices()
 	length := len(services)
-	fmt.Println("Length:", length, "services")
+	log.Info("Length:", length, "services")
 	if length > 0 {
 		return nil
 	} else {
@@ -321,10 +321,9 @@ func TestConfiguration() error {
 }
 
 func getServices() []Service {
-	raw, err := ioutil.ReadFile(configuration.Config.BaseFolder + "services.json")
+	raw, err := ioutil.ReadFile(configuration.Config.DataFolder + "services.json")
 	if err != nil {
-		DebugMessage("Cannot read file!")
-		panic(err)
+		log.Panic("Cannot read file!")
 	} else {
 		DebugMessage("Loaded services.")
 	}
@@ -332,10 +331,11 @@ func getServices() []Service {
 	var s []Service
 	errUnmarshal := json.Unmarshal(raw, &s)
 	if errUnmarshal != nil {
-		fmt.Println("Cannot parse JSON file! Please check the following:")
-		fmt.Println(" - Telegram targets are now strings! If you have custom targets set, make sure they are formatted as a string")
-
-		panic(err)
+		log.Warning("Telegram targets are now strings!")
+		log.Warning("wat gebeurt hier")
+		log.Error("pasta")
+		log.Error("fietspomp")
+		log.Error("Reading JSON as configuration failed.")
 	}
 	return s
 }

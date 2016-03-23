@@ -2,12 +2,14 @@ package services
 
 import (
 	"bytes"
-	"github.com/mdeheij/monitoring/configuration"
 	"os/exec"
 	"strconv"
 	"strings"
 	"syscall"
 	"time"
+
+	"github.com/mdeheij/monitoring/configuration"
+	"github.com/mdeheij/monitoring/log"
 )
 
 //CheckService accepts a command and returns a status code, output (stdout) and the reaction time
@@ -32,7 +34,7 @@ func CheckService(command string) (status int, output string, rtime int64) {
 		symbol = StatusColor("●", 0)
 	}
 
-	DebugMessage(symbol + " [" + now.Format(time.Stamp) + "] {" + elapsedTime.String() + "} (" + strconv.Itoa(status) + ") - " + command + " -" + outputMsg)
+	log.Info(symbol + " " + elapsedTime.String() + " (" + strconv.Itoa(status) + ") - " + command + " -" + outputMsg)
 
 	return status, outputMsg, elapsedTimeHuman
 }

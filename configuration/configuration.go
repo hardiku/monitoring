@@ -15,6 +15,7 @@ var Config Configuration
 //Configuration struct
 type Configuration struct {
 	Hostname                   string
+	DataFolder                 string
 	BaseFolder                 string
 	ResourceFolder             string
 	ServerAddress              string
