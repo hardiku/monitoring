@@ -1,10 +1,9 @@
 package handlers
 
 import (
-	"fmt"
-
 	"github.com/bartholdbos/golegram"
 	"github.com/mdeheij/monitoring/configuration"
+	"github.com/mdeheij/monitoring/log"
 )
 
 type instanceHolder struct {
@@ -13,25 +12,40 @@ type instanceHolder struct {
 
 var instance instanceHolder
 
+func checkMessageError(result golegram.Message, err error) {
+	if err != nil {
+		log.Error("[Telegram] Message error")
+		log.Error(err)
+		log.Error(result)
+	}
+}
+
 //Telegram sends a Telegram message to one or more users by their unique ID
 func Telegram(targets []string, message string) {
 	var err error
 
-	fmt.Println("[Telegram] Sending to following target(s): ", targets)
-
+	//Check if a bot instance have been constructed before
 	if instance.bot == nil {
-		//TODO: get config from file
+		log.Info("Instance bot initialized! Using token:", configuration.Config.TelegramBotToken)
 		instance.bot, err = golegram.NewBot(configuration.Config.TelegramBotToken)
-		//instance.bot, err = golegram.NewBot("94110015:AAE8TIIoQxyu4KdWRnGZ2_yvI9C6-1w1eF0")
 	}
+
 	if err == nil {
-		for _, target := range targets {
-			result, err := instance.bot.SendMessage(target, message)
-			if err != nil {
-				fmt.Println("[Telegram] Message error")
-				fmt.Println(err)
-				fmt.Println(result)
+
+		if len(targets) >= 1 {
+			//If targets have been set up in the specific service, use them
+			for _, target := range targets {
+				result, err := instance.bot.SendMessage(target, message)
+				checkMessageError(result, err)
 			}
+		} else {
+			//If not, then use default one
+			target := configuration.Config.TelegramNotificationTarget
+			result, err := instance.bot.SendMessage(target, message)
+			checkMessageError(result, err)
 		}
+
+	} else {
+		log.Error("Error sending Telegram message!", err.Error())
 	}
 }
