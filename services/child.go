@@ -28,13 +28,14 @@ func CheckService(command string) (status int, output string, rtime int64) {
 	elapsedTimeHuman := elapsedTime.Nanoseconds() / 1000000
 
 	var symbol string
+	logLine := " (" + strconv.Itoa(status) + ") - " + command + " -" + outputMsg
 	if status > 0 {
 		symbol = StatusColor("●", 2)
+		log.Warning(symbol + logLine)
 	} else {
 		symbol = StatusColor("●", 0)
+		log.Notice(" " + symbol + logLine)
 	}
-
-	log.Info(symbol + " " + elapsedTime.String() + " (" + strconv.Itoa(status) + ") - " + command + " -" + outputMsg)
 
 	return status, outputMsg, elapsedTimeHuman
 }
