@@ -34,7 +34,6 @@ func main() {
 			os.Exit(0)
 		}
 	}
-	log.Info("test")
 
 	configuration.Init(config)
 	server.Setup(debug, true)
