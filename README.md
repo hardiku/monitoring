@@ -1,3 +1,4 @@
+<img align="right" src="https://mdeheij.nl/img/monitoring-gopher.svg">
 # Monitoring
 
 Simple monitoring tool with web application written in Go.
