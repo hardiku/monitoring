@@ -6,11 +6,17 @@ import (
 	"github.com/mdeheij/monitoring/log"
 )
 
-type instanceHolder struct {
-	bot *golegram.Bot
-}
+var bot *golegram.Bot
 
-var instance instanceHolder
+func SetupTelegram() {
+	var err error
+	log.Error("Instance bot initialized! Using token:", configuration.Config.TelegramBotToken)
+	bot, err = golegram.NewBot(configuration.Config.TelegramBotToken)
+	if err != nil {
+		log.Error("[Telegram] Init error")
+		log.Error(err)
+	}
+}
 
 func checkMessageError(result golegram.Message, err error) {
 	if err != nil {
@@ -25,9 +31,8 @@ func Telegram(targets []string, message string) {
 	var err error
 
 	//Check if a bot instance have been constructed before
-	if instance.bot == nil {
-		log.Info("Instance bot initialized! Using token:", configuration.Config.TelegramBotToken)
-		instance.bot, err = golegram.NewBot(configuration.Config.TelegramBotToken)
+	if bot == nil {
+		SetupTelegram()
 	}
 
 	if err == nil {
@@ -35,13 +40,14 @@ func Telegram(targets []string, message string) {
 		if len(targets) >= 1 {
 			//If targets have been set up in the specific service, use them
 			for _, target := range targets {
-				result, err := instance.bot.SendMessage(target, message)
+				//disable_web_page_preview bool, parse_mode string
+				result, err := bot.SendMessage(target, message, true, "Markdown")
 				checkMessageError(result, err)
 			}
 		} else {
 			//If not, then use default one
 			target := configuration.Config.TelegramNotificationTarget
-			result, err := instance.bot.SendMessage(target, message)
+			result, err := bot.SendMessage(target, message, true, "Markdown")
 			checkMessageError(result, err)
 		}
 
